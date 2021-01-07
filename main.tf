@@ -18,7 +18,6 @@ resource "vault_identity_group" "default" {
   type              = "internal"
   policies          = ["default", vault_policy.default.name]
   member_entity_ids = var.entity_ids != [] ? var.entity_ids : [vault_identity_entity.default.id]
-
 }
 
 resource "vault_identity_entity" "default" {
