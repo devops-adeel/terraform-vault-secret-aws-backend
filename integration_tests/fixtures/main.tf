@@ -31,22 +31,23 @@ module "vault_approle" {
   service          = local.service
 }
 
+data "aws_iam_policy_document" "default" {
+  version = "2012-10-17"
+  statement {
+    actions = [
+      "iam:*",
+    ]
+    resources = [
+      "*"
+    ]
+  }
+}
+
 resource "vault_aws_secret_backend_role" "default" {
   provider = vault.default
   backend  = module.default.backend_path
   name     = format("%s-%s", local.env, local.service)
-  policy   = <<EOT
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": "iam:*",
-      "Resource": "*"
-    }
-  ]
-}
-EOT
+  policy   = data.aws_iam_policy_document.default.json
 }
 
 provider "vault" {
