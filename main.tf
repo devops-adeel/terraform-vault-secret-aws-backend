@@ -6,7 +6,7 @@ resource "vault_aws_secret_backend" "default" {}
 
 data "vault_policy_document" "default" {
   rule {
-    path         = "aws/creds/{{identity.groups.names.${vault_identity_group.default.id}.metadata.env}}-{{identity.groups.names.${vault_identity_group.default.id}.metadata.service}}"
+    path         = "aws/creds/{{identity.groups.names.aws-creds.metadata.env}}-{{identity.groups.names.aws-creds.metadata.service}}"
     capabilities = ["read"]
     description  = "Allow generating credentials"
   }
@@ -26,4 +26,8 @@ resource "vault_identity_group" "default" {
 
 resource "vault_identity_group" "placeholder" {
   name = "aws-creds-default-group"
+  metadata = {
+    env     = "dev"
+    service = "example"
+  }
 }
